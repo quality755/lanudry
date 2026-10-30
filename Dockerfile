@@ -36,3 +36,6 @@ RUN rm -rf /var/www/html/public/assets \
     && chmod -R 0777 /var/www/html/storage /var/www/html/public/assets
 
 EXPOSE 80
+
+# Start Apache in the foreground on 0.0.0.0:80
+CMD ["apache2-foreground"]
