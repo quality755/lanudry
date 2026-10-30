@@ -49,7 +49,7 @@
         Array.prototype.forEach.call(document.querySelectorAll('[data-dismiss]'), function (btn) {
             btn.addEventListener('click', function () {
                 var flash = btn.closest('[data-flash]');
-                if (flash) flash removeSafely(flash);
+                if (flash) flash.remove();
             });
         });
     }
