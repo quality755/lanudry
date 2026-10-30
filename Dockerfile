@@ -27,6 +27,9 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html
 
+# Production PHP configuration (errors logged, never displayed).
+RUN cp /var/www/html/php.ini /usr/local/etc/php/conf.d/zz-app.ini
+
 # Static assets sit next to the app code; expose them under the web root.
 RUN rm -rf /var/www/html/public/assets \
     && cp -r /var/www/html/assets /var/www/html/public/assets \
