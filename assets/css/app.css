@@ -710,7 +710,6 @@ img, svg {
     width: 14px;
     height: 14px;
     background: var(--pink);
-    border: var(--border-hair displays);
     border: var(--border-hair);
     display: inline-block;
     transform: rotate(12deg);
