@@ -112,7 +112,7 @@ function dashboard_stats(): array
     $monthCollected = (float) $stmt->fetchColumn();
 
     $outstanding = (float) $pdo->query(
-        "SELECT COALESCE(SUM(GREATEST(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)),0)
+        "SELECT COALESCE(SUM(MAX(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)),0)
          FROM orders o WHERE o.status <> 'cancelled'"
     )->fetchColumn();
 

@@ -20,7 +20,7 @@ $orderStmt->execute([$id]);
 $orders = $orderStmt->fetchAll();
 
 $owedStmt = db()->prepare(
-    'SELECT COALESCE(SUM(GREATEST(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
+    'SELECT COALESCE(SUM(MAX(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
      FROM orders o WHERE o.customer_id = ? AND o.status <> \'cancelled\''
 );
 $owedStmt->execute([$id]);

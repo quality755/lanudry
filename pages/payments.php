@@ -57,7 +57,7 @@ $monthTotal = (float) db()->query(
     "SELECT COALESCE(SUM(amount),0) FROM payments WHERE paid_at >= '" . date('Y-m-01 00:00:00') . "'"
 )->fetchColumn();
 $outstanding = (float) db()->query(
-    "SELECT COALESCE(SUM(GREATEST(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)),0)
+    "SELECT COALESCE(SUM(MAX(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)),0)
      FROM orders o WHERE o.status <> 'cancelled'"
 )->fetchColumn();
 

@@ -22,7 +22,7 @@ $stmt = db()->prepare(
     'SELECT c.*,
             (SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.id) AS orders_count,
             (SELECT COALESCE(SUM(o.total), 0) FROM orders o WHERE o.customer_id = c.id AND o.status <> \'cancelled\') AS spend,
-            (SELECT COALESCE(SUM(GREATEST(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
+            (SELECT COALESCE(SUM(MAX(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
                 FROM orders o WHERE o.customer_id = c.id AND o.status <> \'cancelled\') AS owed
      FROM customers c' . $where . '
      ORDER BY c.name LIMIT ' . (int) $pager['per'] . ' OFFSET ' . (int) $pager['offset']
@@ -33,7 +33,7 @@ $customers = $stmt->fetchAll();
 $totals = db()->query(
     'SELECT COUNT(*) AS total,
             (SELECT COUNT(*) FROM customers WHERE created_at >= \'' . date('Y-m-01 00:00:00') . '\') AS new_this_month,
-            (SELECT COALESCE(SUM(GREATEST(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
+            (SELECT COALESCE(SUM(MAX(o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id), 0)), 0)
                 FROM orders o WHERE o.status <> \'cancelled\') AS owed
      FROM customers'
 )->fetch() ?: ['total' => 0, 'new_this_month' => 0, 'owed' => 0];
