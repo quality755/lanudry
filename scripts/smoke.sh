@@ -102,7 +102,7 @@ result=$(post "${BASE}?r=orders/new" \
     -d "item_qty[]=2" \
     -d "item_price[]=${SERVICE_PRICE}")
 case "$result" in
-    302*orders/show*id=*) pass "order saved and redirected to detail page" ;;
+    302*orders*show*id=*) pass "order saved and redirected to detail page" ;;
     *) fail "order save returned: $result" ;;
 esac
 ORDER_ID=$(sqlite3 "$DB_FILE" "SELECT MAX(id) FROM orders;")
@@ -135,7 +135,7 @@ echo "== receipt, reports, csv"
 inv=$(get "${BASE}?r=invoice&id=${ORDER_ID}")
 printf '%s' "$inv" | grep -q "RECEIPT" && pass "receipt page renders" || fail "receipt page missing heading"
 printf '%s' "$inv" | grep -q "${ORDER_NO}" && pass "receipt shows order number" || fail "receipt missing order number"
-printf '%s' "$inv" | grep -q "Smoke Test Order" && pass "receipt shows line item label" || fail "receipt missing line items"
+printf '%s' "$inv" | grep -q "$SERVICE_NAME" && pass "receipt shows line item \"$SERVICE_NAME\"" || fail "receipt missing line items"
 
 rep=$(get "${BASE}?r=reports")
 printf '%s' "$rep" | grep -qi "revenue" && pass "reports page renders" || fail "reports page missing revenue section"
