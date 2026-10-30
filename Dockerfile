@@ -15,7 +15,7 @@ COPY . /var/www/html
 
 # Serve the front controller as the document root.
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri "s!/var/www/html!${APACHE_DOCUMENT_ROOT.!}!g" /etc/apache2/sites-available/000-default.conf \
+RUN sed -ri 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
     && printf '%s\n' \
         'DirectoryIndex index.php' \
         '<IfModule mod_rewrite.c>' \
