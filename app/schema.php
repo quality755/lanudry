@@ -258,7 +258,7 @@ final class Schema
 
             $orderStmt->execute([
                 'ORD-' . date('Y', strtotime($created)) . '-' . str_pad((string) $seq, 3, '0', STR_PAD_LEFT),
-                $customerIds[$seed[0] === 0 && $status === 'received' ? 0 : ($seq % count($customerIds))],
+                $customerIds[($seq - 1) % count($customerIds)],
                 $employeeIds[$employeeIndex],
                 $status,
                 $pickup,
