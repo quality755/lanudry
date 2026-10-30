@@ -66,7 +66,7 @@ $openOrders = db()->query(
             (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id) AS paid
      FROM orders o LEFT JOIN customers c ON c.id = o.customer_id
      WHERE o.status <> 'cancelled'
-     HAVING (o.total - paid) > 0.009
+       AND (o.total - (SELECT COALESCE(SUM(p.amount),0) FROM payments p WHERE p.order_id = o.id)) > 0.009
      ORDER BY o.created_at ASC LIMIT 100"
 )->fetchAll();
 
