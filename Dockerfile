@@ -2,7 +2,10 @@
 FROM php:8.4-apache
 
 # --- PHP extensions ------------------------------------------------------
-RUN docker-php-ext-install pdo_mysql \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-install pdo_mysql \
     && docker-php-ext-enable pdo_mysql
 
 # --- Apache --------------------------------------------------------------
