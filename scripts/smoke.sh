@@ -83,9 +83,11 @@ CSRF=$(csrf_from "$dash")
 
 echo "== order creation with line items"
 CUSTOMER_ID=$(sqlite3 "$DB_FILE" "SELECT id FROM customers ORDER BY id LIMIT 1;")
-SERVICE_ROW=$(sqlite3 "$DB_FILE" "SELECT id || '|' || price FROM services ORDER BY id LIMIT 1;")
+SERVICE_ROW=$(sqlite3 "$DB_FILE" "SELECT id || '|' || price || '|' || name FROM services ORDER BY id LIMIT 1;")
 SERVICE_ID=${SERVICE_ROW%%|*}
-SERVICE_PRICE=${SERVICE_ROW##*|}
+SERVICE_REST=${SERVICE_ROW#*|}
+SERVICE_PRICE=${SERVICE_REST%%|*}
+SERVICE_NAME=${SERVICE_REST#*|}
 result=$(post "${BASE}?r=orders/new" \
     -d "action=order.save" \
     -d "customer_id=${CUSTOMER_ID}" \
